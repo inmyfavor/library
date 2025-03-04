@@ -20,13 +20,11 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/books/**", "/api/login").authenticated()
-                .anyRequest().permitAll()
+                .requestMatchers("/api/books/**", "/api/logout").authenticated()
             )
             .formLogin(login -> login
                 .loginProcessingUrl("/api/login")
                 .successHandler((request, response, authentication) -> {
-                    response.setContentType("application/json");
                     response.setStatus(HttpServletResponse.SC_OK);
                 })
                 .failureHandler((request, response, exception) -> {
@@ -39,7 +37,7 @@ public class SecurityConfig {
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setContentType("application/json");
-                    response.getWriter().write("{\"error\": \"Доступ запрещен\"}");
+                    response.getWriter().write("{\"error\": \"Доступ запрещён\"}");
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 })
             );
